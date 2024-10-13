@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static %}
+
+<h1>Модуль: {{ module.title }}</h1>
+
+{% block content %}
+        {% for question, form in forms %}
+        <div class="test">
+            <p><strong>{{ question.text }}</strong></p>
+            {% if form %}
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit">Check your ass</button>
+                </form>
+            {% else %}
+                <p>Вы уже ответили правильно на этот вопрос.</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+    <p>{{ request.user.userprofile.points }}</p>
+
+    {% if messages %}
+        {% for message in messages %}
+          {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}
+        {% endfor %}
+    {% endif %}
+{% endblock %}

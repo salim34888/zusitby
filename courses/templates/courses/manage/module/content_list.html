@@ -75,6 +75,16 @@ Module {{ module.order|add:1 }}: {{ module.title }}
                 File
                 </a>
             </li>
+            <li>
+                <a href="{% url "module_content_create" module.id "question" %}">
+                Test
+                </a>
+            </li>
+            <li>
+                <a href="{% url "module_content_create" module.id "code" %}">
+                Code
+                </a>
+            </li>
         </ul>
     </div>
     {% endwith %}

@@ -5,7 +5,7 @@ from django.contrib.contenttypes.models import ContentType
 from .fields import OrderField
 from django.template.loader import render_to_string
 
-class Subject(models.Model):
+class Subject(models.Model): # Раздел
     title = models.CharField(max_length=200)
     slug = models.CharField(max_length=200)
 
@@ -16,7 +16,7 @@ class Subject(models.Model):
         return self.title
 
 
-class Course(models.Model):
+class Course(models.Model): # Курс
     owner = models.ForeignKey(
         User,
         related_name='courses_created',
@@ -45,7 +45,7 @@ class Course(models.Model):
         return self.title
 
 
-class Module(models.Model):
+class Module(models.Model): # Тема
     course = models.ForeignKey(
         Course, related_name='modules', on_delete=models.CASCADE
     )
@@ -74,7 +74,7 @@ class Content(models.Model):
         ContentType,
         on_delete=models.CASCADE,
         limit_choices_to={
-            'model_in':('text', 'video', 'image', 'file')
+            'model_in':('text', 'video', 'image', 'file', 'question', 'code')
         }
     )
     
@@ -93,7 +93,7 @@ class ItemBase(models.Model):
         on_delete=models.CASCADE
     )
 
-    title = models.CharField(max_length=250)
+    title = models.CharField(max_length=250, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updates = models.DateTimeField(auto_now=True)
 
@@ -125,4 +125,22 @@ class Image(ItemBase):
 class Video(ItemBase):
     url = models.URLField()
 
+
+class Question(models.Model):
+    module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='questions')
+    text = models.CharField(max_length=255)
+    correct_answer = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.text
+
+    def render(self):
+        return render_to_string(
+            f'courses/content/question.html',
+            {'item': self}
+        )
+
+
+class Code(ItemBase):
+    code = models.TextField()
 

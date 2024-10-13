@@ -6,8 +6,14 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import FormView
 from .forms import CourseEnrollForm
 from django.views.generic.list import ListView
-from courses.models import Course
+from courses.models import Course, Question, Module
 from django.views.generic.detail import DetailView
+from django.shortcuts import get_object_or_404
+from .forms import AnswerForm
+from .models import UserProfile, UserAnswer
+from django.views.generic import View
+from django.template.response import TemplateResponse
+from django.contrib import messages
 
 
 class StudentRegistrationView(CreateView):
@@ -70,3 +76,78 @@ class StudentCourseDetailView(LoginRequiredMixin, DetailView):
             # get first module
             context['module'] = course.modules.all()[0]
         return context
+
+
+class ModuleQuestionsView(LoginRequiredMixin, View):
+    template_name = 'students/course/question.html'
+
+    def get_user_profile(self, user):
+        profile, created = UserProfile.objects.get_or_create(user=user)
+        return profile
+
+    def get(self, request, module_id, *args, **kwargs):
+        module = get_object_or_404(Module, id=module_id)
+
+        questions = Question.objects.filter(module=module)
+
+        forms = []
+        for question in questions:
+            user_answer = UserAnswer.objects.filter(user=request.user, question=question, is_correct=True).first()
+
+            if user_answer:
+                forms.append((question, None))
+            else:
+                forms.append((question, AnswerForm(question=question)))
+
+        return TemplateResponse(request, self.template_name, {
+            'module': module,
+            'forms': forms
+        })
+
+    def post(self, request, module_id, *args, **kwargs):
+        module = get_object_or_404(Module, id=module_id)
+        user_profile = self.get_user_profile(request.user)
+        question_id = request.POST.get('question_id')
+        question = get_object_or_404(Question, id=question_id, module=module)
+
+        user_answer = UserAnswer.objects.filter(user=request.user, question=question, is_correct=True).first()
+
+        if user_answer:
+            messages.info(request, 'Вы уже ответили правильно на этот вопрос.')
+            return self.get(request, module_id)
+
+        form = AnswerForm(request.POST, question=question)
+
+        if form.is_valid():
+            user_answer = form.cleaned_data['answer']
+            is_correct = user_answer.lower() == question.correct_answer.lower()
+            UserAnswer.objects.create(
+                user=request.user,
+                question=question,
+                answer=user_answer,
+                is_correct=is_correct
+            )
+
+            if is_correct:
+                user_profile.points += 1
+                messages.success(request, 'Ne Sosal')
+            else:
+                messages.error(request, 'V Sosal')
+
+            user_profile.save()
+
+        questions = Question.objects.filter(module=module)
+
+        forms = []
+        for question in questions:
+            user_answer = UserAnswer.objects.filter(user=request.user, question=question, is_correct=True).first()
+
+            if user_answer:
+                forms.append((question, None))
+            else:
+                forms.append((question, AnswerForm(question=question)))
+
+        return TemplateResponse(request, self.template_name, {
+            'module': module,
+            'forms': forms
+        })

@@ -72,7 +72,7 @@ class ContentCreateUpdateView(TemplateResponseMixin, View):
     template_name = 'courses/manage/content/form.html'
 
     def get_model(self, model_name):
-        if model_name in ['text', 'video', 'image', 'file']:
+        if model_name in ['text', 'video', 'image', 'file', 'question', 'code']:
             return apps.get_model(
                 app_label='courses', model_name=model_name
             )

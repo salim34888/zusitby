@@ -2,32 +2,32 @@
 
 {% block title %}
   {% if subject %}
-    {{ subject.title }} courses
+    {{ subject.title }}
   {% else %}
-    All courses
+    Все курсы
   {% endif %}
 {% endblock %}
 
 {% block content %}
   <h1>
     {% if subject %}
-      {{ subject.title }} courses
+      {{ subject.title }} курс
     {% else %}
-      All courses
+      Все курсы
     {% endif %}
   </h1>
   <div class="contents">
-    <h3>Subjects</h3>
+    <h3>Разделы:</h3>
     <ul id="modules">
       <li {% if not subject %}class="selected"{% endif %}>
-        <a href="{% url "course_list" %}">All</a>
+        <a href="{% url "course_list" %}">Все</a>
       </li>
       {% for s in subjects %}
         <li {% if subject == s %}class="selected"{% endif %}>
           <a href="{% url "course_list_subject" s.slug %}">
             {{ s.title }}
             <br>
-            <span>{{ s.total_courses }} course{{ s.total_courses|pluralize }}</span>
+            <span>{{ s.total_courses }} курс{{ s.total_courses|pluralize }}</span>
           </a>
         </li>
       {% endfor %}
@@ -43,8 +43,8 @@
         </h3>
         <p>
           <a href="{% url "course_list_subject" subject.slug %}">{{ subject }}</a>.
-            {{ course.total_modules }} modules.
-            Instructor: {{ course.owner.get_full_name }}
+            {{ course.total_modules }} Тема.
+            Boss of this GYM: {{ course.owner.get_full_name }}
         </p>
       {% endwith %}
     {% endfor %}

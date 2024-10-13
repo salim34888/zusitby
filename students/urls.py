@@ -28,4 +28,9 @@ urlpatterns = [
         cache_page(60 * 15)(views.StudentCourseDetailView.as_view()),
         name='student_course_detail_module'
     ),
+    path(
+        'course/<pk>/<module_id>/test/',
+        cache_page(60 * 15)(views.ModuleQuestionsView.as_view()),
+        name='module_questions'
+    ),
 ]
