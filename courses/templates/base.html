@@ -8,19 +8,21 @@
     </head>
     <body>
         <div id="header">
-        <a href="/" class="logo">ZusIT</a>
-        <ul class="menu">
-            {% if request.user.is_authenticated %}
-                <li>
-                    <form action="{% url "logout" %}" method="post">
-                        {% csrf_token %}
-                        <button type="submit">Выйти покурить</button>
-                    </form>
-                </li>
-            {% else %}
-                <li><a href="{% url "login" %}">Welcome to the club, buddy!</a></li>
-            {% endif %}
-        </ul>
+            <a href="/" class="logo">ZusIT</a>
+            <p>{{ request.user.userprofile.points }}</p>
+            <a href="/students/profile/">Вот твой акк</a>
+            <ul class="menu">
+                {% if request.user.is_authenticated %}
+                    <li>
+                        <form action="{% url "logout" %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit">Выйти покурить</button>
+                        </form>
+                    </li>
+                {% else %}
+                    <li><a href="{% url "login" %}">Welcome to the club, buddy!</a></li>
+                {% endif %}
+            </ul>
         </div>
 
         <div id="content">

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Account
+{% endblock %}
+
+{% block content %}
+    <h1>Профиль {{ profile.user.username }}</h1>
+
+    <p><strong>Имя:</strong> {{ profile.user.first_name }} {{ profile.user.last_name }}</p>
+
+    <p>
+        <strong>Аватар:</strong>
+        {% if profile.avatar %}
+            <img src="{{ profile.avatar.url }}" alt="Аватар" width="150">
+        {% else %}
+            <p>Аватар не загружен.</p>
+        {% endif %}
+    </p>
+
+    <p><strong>Количество баллов:</strong> {{ profile.points }}</p>
+
+    <a href="{% url 'edit_profile' %}">Редактировать профиль</a>
+{% endblock %}

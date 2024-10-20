@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Пути обучения
+{% endblock %}
+
+{% block content %}
+<!--  <h1>-->
+<!--    {% if subject %}-->
+<!--      {{ subject.title }} курс-->
+<!--    {% else %}-->
+<!--      Все курсы-->
+<!--    {% endif %}-->
+<!--  </h1>-->
+  <div class="contents">
+    <h3>Пути обучения:</h3>
+    <ul id="modules">
+<!--      <li {% if not subject %}class="selected"{% endif %}>-->
+<!--        <a href="{% url "course_list" %}">Все</a>-->
+<!--      </li>-->
+      {% for s in subjects %}
+        <li {% if subject == s %}class="selected"{% endif %}>
+          <a href="{% url "course_list_subject" s.slug %}">
+            {{ s.title }}
+            <br>
+<!--            <span>{{ s.total_courses }} курс{{ s.total_courses|pluralize }}</span>-->
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+{% endblock %}

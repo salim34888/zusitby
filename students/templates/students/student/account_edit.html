@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Account
+{% endblock %}
+
+{% block content %}
+    <h1>Редактирование профиля {{ user.username }}</h1>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <h2>Изменить имя</h2>
+        {{ user_form.as_p }}
+
+        <h2>Загрузить аватар</h2>
+        {% if profile_form.instance.avatar %}
+            <img src="{{ profile_form.instance.avatar.url }}" alt="Текущий аватар" width="100">
+        {% endif %}
+        {{ profile_form.as_p }}
+
+        <button type="submit">Сохранить</button>
+    </form>
+
+    <a href="{% url 'profile' %}">Вернуться к профилю</a>
+{% endblock %}

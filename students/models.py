@@ -5,6 +5,7 @@ from courses.models import Question
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     points = models.IntegerField(default=0)
+    avatar = models.ImageField(upload_to='avatars', blank=True, null=True)
 
     def __str__(self):
         return self.user.username

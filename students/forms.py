@@ -1,5 +1,7 @@
 from django import forms
 from courses.models import Course
+from .models import UserProfile
+from django.contrib.auth.models import User
 
 class CourseEnrollForm(forms.Form):
     course = forms.ModelChoiceField(
@@ -21,3 +23,16 @@ class AnswerForm(forms.Form):
         super().__init__(*args, **kwargs)
         self.fields['answer'].label = f'Ваш ответ на вопрос: {self.question.text}' if self.question else 'Ваш ответ'
         self.fields['question_id'].initial = self.question.id
+
+
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name']
+
+
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['avatar']
+

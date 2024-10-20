@@ -6,10 +6,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import FormView
 from .forms import CourseEnrollForm
 from django.views.generic.list import ListView
+from django.views.generic import UpdateView
 from courses.models import Course, Question, Module
 from django.views.generic.detail import DetailView
 from django.shortcuts import get_object_or_404
-from .forms import AnswerForm
+from .forms import AnswerForm, UserProfileForm, UserForm
 from .models import UserProfile, UserAnswer
 from django.views.generic import View
 from django.template.response import TemplateResponse
@@ -68,14 +69,16 @@ class StudentCourseDetailView(LoginRequiredMixin, DetailView):
         # get course object
         course = self.get_object()
         if 'module_id' in self.kwargs:
-            # get current module
             context['module'] = course.modules.get(
                 id=self.kwargs['module_id']
             )
         else:
-            # get first module
             context['module'] = course.modules.all()[0]
         return context
+
+
+class StudentCourseView(StudentCourseDetailView):
+    template_name = 'students/course/module_view.html'
 
 
 class ModuleQuestionsView(LoginRequiredMixin, View):
@@ -150,4 +153,44 @@ class ModuleQuestionsView(LoginRequiredMixin, View):
         return TemplateResponse(request, self.template_name, {
             'module': module,
             'forms': forms
+        })
+
+
+class UserProfileView(LoginRequiredMixin, DetailView):
+    model = UserProfile
+    template_name = 'students/student/account.html'
+    context_object_name = 'profile'
+
+    def get_object(self):
+        return self.request.user.userprofile
+
+
+class UserProfileEditView(LoginRequiredMixin, View):
+    template_name = 'students/student/account_edit.html'
+    success_url = reverse_lazy('profile')
+
+    def get(self, request, *args, **kwargs):
+        user_form = UserForm(instance=request.user)
+        profile_form = UserProfileForm(instance=request.user.userprofile)
+        return TemplateResponse(request, self.template_name, {
+            'user_form': user_form,
+            'profile_form': profile_form
+        })
+
+    def post(self, request, *args, **kwargs):
+        user_form = UserForm(request.POST, instance=request.user)
+        profile_form = UserProfileForm(request.POST, request.FILES, instance=request.user.userprofile)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            return TemplateResponse(request, self.template_name, {
+                'user_form': user_form,
+                'profile_form': profile_form,
+                'success_url': self.success_url  # Используем reverse_lazy для успешного URL
+            })
+
+        return TemplateResponse(request, self.template_name, {
+            'user_form': user_form,
+            'profile_form': profile_form
         })
