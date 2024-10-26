@@ -1,45 +1,60 @@
 {% extends "base.html" %}
-{% load cache %}
+<!--{% load cache %}-->
 
 {% block title %}
   {{ object.title }}
 {% endblock %}
 
 {% block content %}
-  <h1>
-    {{ module.title }}
-  </h1>
-  <div class="contents">
-    <h3>Темы</h3>
-    <ul id="modules">
-      {% for m in object.modules.all %}
-        <li data-id="{{ m.id }}" {% if m == module %}class="selected"{% endif %}>
-          <a href="{% url "student_course_detail_module" object.id m.id %}">
-            <span>
-              Тема <span class="order">{{ m.order|add:1 }}</span>
-            </span>
-            <br>
-            {{ m.title }}
-          </a>
-        </li>
-      {% empty %}
-        <li>Тем пока что нет</li>
-      {% endfor %}
-    </ul>
-  </div>
+<!--  <h1>-->
+<!--    {{ module.title }} - ну это название темы короче...  -->
+<!--  </h1>-->
+<!--  <div class="contents">-->
+<!--    <h3>Темы</h3>-->
+<!--    <ul id="modules">-->
+<!--      {% for m in object.modules.all %}-->
+<!--        <li data-id="{{ m.id }}" {% if m == module %}class="selected"{% endif %}>-->
+<!--          <a href="{% url "student_course_detail_module" object.id m.id %}">-->
+<!--            <span>-->
+<!--              Тема <span class="order">{{ m.order|add:1 }}</span>-->
+<!--            </span>-->
+<!--            <br>-->
+<!--            {{ m.title }}-->
+<!--          </a>-->
+<!--        </li>-->
+<!--      {% empty %}-->
+<!--        <li>Тем пока что нет</li>-->
+<!--      {% endfor %}-->
+<!--    </ul>-->
+<!--  </div>-->
   <div class="module">
-    {% cache 600 module_contents module %}
+<!--    {% cache 600 module_contents module %}-->
       {% for content in module.contents.all %}
         {% with item=content.item %}
 
           {% if item.title != None %}
             <h2>{{ item.title }}</h2>
-              {{ item.render }}
           {% endif %}
-
+          {{ item.render }}
         {% endwith %}
       {% endfor %}
-    {% endcache %}
+<!--    {% endcache %}-->
   </div>
 <a href="{{ request.path }}test/"> Проверить свои знания ...</a>
+<div class="questions">
+  {% for question, form in forms %}
+            <div class="test">
+                <p><strong>{{ question.text }}</strong></p>
+                {% if form %}
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit">Check your ass</button>
+                    </form>
+                {% else %}
+                    <p>Вы уже ответили правильно на этот вопрос.</p>
+                {% endif %}
+            </div>
+  {% endfor %}
+</div>
 {% endblock %}

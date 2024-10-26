@@ -10,6 +10,7 @@
         <div id="header">
             <a href="/" class="logo">ZusIT</a>
             <p>{{ request.user.userprofile.points }}</p>
+            <img src="/media/{{ request.user.userprofile.avatar }}" alt="your avatar" width="50px" height="auto">
             <a href="/students/profile/">Вот твой акк</a>
             <ul class="menu">
                 {% if request.user.is_authenticated %}

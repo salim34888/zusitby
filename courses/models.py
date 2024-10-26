@@ -37,6 +37,7 @@ class Course(models.Model): # Курс
     slug = models.SlugField(max_length=200, unique=True)
     overview = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
+    # types = models.CharField(max_length=2, choices={"PR":"PROJECT", "CR":"COURSE"}, default="CR")
 
     class Meta:
         ordering = ['-created']
