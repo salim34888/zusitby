@@ -80,7 +80,7 @@ class ContentCreateUpdateView(TemplateResponseMixin, View):
     template_name = 'courses/manage/content/form.html'
 
     def get_model(self, model_name):
-        if model_name in ['text', 'video', 'image', 'file', 'question', 'code']:
+        if model_name in ['text', 'video', 'image', 'file', 'question', 'code', 'tasks']:
             return apps.get_model(
                 app_label='courses', model_name=model_name
             )
@@ -214,7 +214,7 @@ class OwnerEditMixin:
 
 class OwnerCourseMixin(OwnerMixin, LoginRequiredMixin, PermissionRequiredMixin):
     model = Course
-    fields = ['subject', 'title', 'slug', 'overview']
+    fields = ['subject', 'title', 'slug', 'overview', 'difficulty', 'logo']
     success_url = reverse_lazy('manage_course_list')
 
 

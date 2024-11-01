@@ -33,11 +33,19 @@ class Course(models.Model): # Курс
         blank=True
     )
 
+    diff = {
+        'EASY': 'EASY',
+        'MIDDLE': 'MIDDLE',
+        'HARD': 'HARD',
+        'INSANE': 'INSANE',
+    }
+
     title = models.CharField(max_length=200)
+    difficulty = models.CharField(max_length=6, choices=diff, default='EASY')
+    logo = models.FileField(upload_to='images')
     slug = models.SlugField(max_length=200, unique=True)
     overview = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
-    # types = models.CharField(max_length=2, choices={"PR":"PROJECT", "CR":"COURSE"}, default="CR")
 
     class Meta:
         ordering = ['-created']
@@ -55,10 +63,8 @@ class Module(models.Model): # Тема
     description = models.TextField(blank=True)
     order = OrderField(blank=True, for_fields=['course'])
 
-
     class Meta:
         ordering = ['order']
-
 
     def __str__(self):
         return f'{self.order}. {self.title}'
@@ -75,7 +81,7 @@ class Content(models.Model):
         ContentType,
         on_delete=models.CASCADE,
         limit_choices_to={
-            'model_in':('text', 'video', 'image', 'file', 'question', 'code')
+            'model_in':('text', 'video', 'image', 'file', 'question', 'code', 'tasks')
         }
     )
     
@@ -127,10 +133,12 @@ class Video(ItemBase):
     url = models.URLField()
 
 
-class Question(models.Model):
+class Question(models.Model): # write owner column
     module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='questions')
     text = models.CharField(max_length=255)
     correct_answer = models.CharField(max_length=255)
+    expected_output = models.TextField(blank=True, null=True)
+    coins = models.IntegerField(default=10)
 
     def __str__(self):
         return self.text

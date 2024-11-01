@@ -5,7 +5,9 @@
     <div class="module">
         {% for course in object_list %}
             <div class="course-info">
+                <img src="{{ course.logo.url }}" alt="" width="300px" height="auto">
                 <h3>{{ course.title }}</h3>
+                <h4>{{ course.difficulty }}</h4>
                 <p><a href="{% url "student_course_detail" course.id %}">
                 выбор за тобой</a></p>
             </div>

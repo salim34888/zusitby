@@ -277,3 +277,8 @@ ul#course-modules li:hover {
 .test {
     margin: 30px;
 }
+
+.course_choice {
+    border: solid;
+    margin: 20px;
+}

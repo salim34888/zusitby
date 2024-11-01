@@ -4,25 +4,24 @@
 
 {% block content %}
             {% for question, form in forms %}
-            <div class="test">
-                <p><strong>{{ question.text }}</strong></p>
-                {% if form %}
-                    <form method="post">
-                        {% csrf_token %}
-                        {{ form.as_p }}
-                        <button type="submit">Check your ass</button>
-                    </form>
-                {% else %}
-                    <p>Вы уже ответили правильно на этот вопрос.</p>
+                {% if question.correct_answer != "None" %}
+                    <div class="test">
+                        <p><strong>{{ question.text }}</strong></p>
+                        {% if form %}
+                            <form method="post">
+                                {% csrf_token %}
+                                {{ form.as_p }}
+                                <button type="submit">Check your ass</button>
+                            </form>
+                        {% else %}
+                            <p>Вы уже ответили правильно на этот вопрос.</p>
+                        {% endif %}
+                    </div>
                 {% endif %}
-            </div>
+            {% empty %}
+                <h1>Вопросов пока нет...</h1>
             {% endfor %}
 
 <!--    <p>{{ request.user.userprofile.points }}</p>-->
-
-    {% if messages %}
-        {% for message in messages %}
-          {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}
-        {% endfor %}
-    {% endif %}
+<a href="{% url "student_course_detail" module.course.id %}"> back beetches </a>
 {% endblock %}

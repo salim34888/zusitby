@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+<h1>Модуль: {{ module.title }}</h1>
+
+{% block content %}
+            <h1>Задания по модулю: {{ module.title }}</h1>
+
+{% for question, form in forms %}
+    <div>
+        <p><strong>{{ question.text }}</strong></p>
+
+        {% if form %}
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}  <!-- Здесь только поле для ввода кода -->
+                <input type="hidden" name="question_id" value="{{ question.id }}">
+                <button type="submit">Отправить код</button>
+            </form>
+        {% else %}
+            <p>Вы уже правильно ответили на этот вопрос.</p>
+        {% endif %}
+    </div>
+{% endfor %}
+
+<hr>
+
+<!-- Блок для отображения результата выполнения кода -->
+{% if result %}
+    <h2>Результат выполнения кода:</h2>
+    <pre>{{ result }}</pre>
+{% endif %}
+{% endblock %}

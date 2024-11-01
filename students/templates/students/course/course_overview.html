@@ -4,6 +4,7 @@
     {% for course in object_list %}
             <div class="course-info">
                 <h3>{{ course.title }}</h3>
+                <h4>{{ course.difficulty }}</h4>
                 <p><a href="{% url "student_course_detail" course.id %}">
                 начать ебашить</a></p>
             </div>

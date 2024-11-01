@@ -10,11 +10,14 @@ from django.views.generic import UpdateView
 from courses.models import Course, Question, Module
 from django.views.generic.detail import DetailView
 from django.shortcuts import get_object_or_404
-from .forms import AnswerForm, UserProfileForm, UserForm
+from .forms import AnswerForm, UserProfileForm, UserForm, CodeForm
 from .models import UserProfile, UserAnswer
 from django.views.generic import View
 from django.template.response import TemplateResponse
 from django.contrib import messages
+import sys
+from io import StringIO
+import re
 
 
 class StudentRegistrationView(CreateView):
@@ -54,6 +57,79 @@ class StudentCourseListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         qs = super().get_queryset()
         return qs.filter(students__in=[self.request.user])
+
+
+class CodeQuestionView(LoginRequiredMixin, View):
+    template_name = 'students/course/taks.html'
+
+    def get(self, request, module_id, *args, **kwargs):
+        module = get_object_or_404(Module, id=module_id)
+        questions = Question.objects.filter(module=module)
+
+        forms = []
+        for question in questions:
+            user_answer = UserAnswer.objects.filter(user=request.user, question=question, is_correct=True).first()
+
+            if user_answer:
+                forms.append((question, None))
+            else:
+                forms.append((question, CodeForm()))
+
+        return TemplateResponse(request, self.template_name, {
+            'module': module,
+            'forms': forms,
+            'result': None,
+        })
+
+    def post(self, request, module_id, *args, **kwargs):
+        module = get_object_or_404(Module, id=module_id)
+        question_id = request.POST.get('question_id')
+        question = get_object_or_404(Question, id=question_id, module=module)
+
+        form = CodeForm(request.POST)
+
+        execution_result = None
+
+        if form.is_valid():
+            user_code = form.cleaned_data['code']
+
+            old_stdout = sys.stdout
+            redirected_output = sys.stdout = StringIO()
+
+            try:
+                exec(user_code)
+                execution_result = redirected_output.getvalue()
+            except Exception as e:
+                execution_result = f'Ошибка: {str(e)}'
+            finally:
+                sys.stdout = old_stdout
+
+            if re.sub('\s+', '', execution_result) == re.sub('\s+', '', question.expected_output):
+                UserAnswer.objects.create(
+                    user=request.user,
+                    question=question,
+                    answer=user_code,
+                    is_correct=True
+                )
+
+                user_profile, created = UserProfile.objects.get_or_create(user=request.user)
+                user_profile.points += question.coins
+                user_profile.save()
+
+        forms = []
+        questions = Question.objects.filter(module=module)
+        for question in questions:
+            user_answer = UserAnswer.objects.filter(user=request.user, question=question, is_correct=True).first()
+            if user_answer:
+                forms.append((question, None))
+            else:
+                forms.append((question, CodeForm()))
+
+        return TemplateResponse(request, self.template_name, {
+            'module': module,
+            'forms': forms,
+            'result': execution_result
+        })
 
 
 class ModuleQuestionsView(LoginRequiredMixin, View):
@@ -107,10 +183,7 @@ class ModuleQuestionsView(LoginRequiredMixin, View):
             )
 
             if is_correct:
-                user_profile.points += 1
-                messages.success(request, 'Ne Sosal')
-            else:
-                messages.error(request, 'V Sosal')
+                user_profile.points += question.coins
 
             user_profile.save()
 
@@ -131,7 +204,7 @@ class ModuleQuestionsView(LoginRequiredMixin, View):
         })
 
 
-class StudentCourseDetailView(ModuleQuestionsView, LoginRequiredMixin, DetailView):
+class StudentCourseDetailView(CodeQuestionView, LoginRequiredMixin, DetailView):
     model = Course
     template_name = 'students/course/detail.html'
 
@@ -152,7 +225,7 @@ class StudentCourseDetailView(ModuleQuestionsView, LoginRequiredMixin, DetailVie
         return context
 
 
-class StudentCourseView(LoginRequiredMixin, DetailView):
+class StudentCourseView(LoginRequiredMixin, DetailView): # in future optimize this fucking code...
     model = Course
     template_name = 'students/course/module_view.html'
 

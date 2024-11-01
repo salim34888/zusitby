@@ -25,6 +25,17 @@ class AnswerForm(forms.Form):
         self.fields['question_id'].initial = self.question.id
 
 
+class CodeForm(forms.Form):
+    code = forms.CharField(
+        widget=forms.Textarea(attrs={
+            'placeholder': 'Введите ваш код здесь',
+            'rows': 10,
+            'cols': 60
+        }),
+        label="Введите код"
+    )
+
+
 class UserForm(forms.ModelForm):
     class Meta:
         model = User
