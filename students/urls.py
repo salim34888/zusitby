@@ -48,4 +48,9 @@ urlpatterns = [
         (views.CodeQuestionView.as_view()), # cache_page(60 * 15)(views.ModuleQuestionsView.as_view()),
         name='code_questions'
     ),
+    path(
+        'leaderboard/',
+        (views.UserListView.as_view()), # cache_page(60 * 15)(views.ModuleQuestionsView.as_view()),
+        name='leaderboard'
+    ),
 ]

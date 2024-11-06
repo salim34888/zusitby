@@ -9,35 +9,32 @@
     {{ module.title }}
   </h1>
   <div class="contents">
-    <h3>Темы</h3>
-    <ul id="modules">
-      {% for m in object.modules.all %}
-        <li data-id="{{ m.id }}" {% if m == module %}class="selected"{% endif %}>
-          <a href="{% url "student_course_detail_module" object.id m.id %}">
-            <span>
-              Тема <span class="order">{{ m.order|add:1 }}</span>
-            </span>
-            <br>
-            {{ m.title }}
-          </a>
-        </li>
-      {% empty %}
-        <li>Тем пока что нет</li>
-      {% endfor %}
-    </ul>
-  </div>
-<!--  <div class="module">-->
-<!--      {% for content in module.contents.all %}-->
-<!--        {% with item=content.item %}-->
+  <h3>Темы</h3>
+  <ul id="modules">
+    {% for m in object.modules.all %}
+      <li data-id="{{ m.id }}" {% if m == module %}class="selected"{% endif %}>
+        <a href="{% url "student_course_detail_module" object.id m.id %}">
+          <span>
+            Тема <span class="order">{{ m.order|add:1 }}</span>
+          </span>
+          <br>
+          {{ m.title }}
+        </a>
 
-<!--          {% if item.title != None %}-->
-<!--            <h2>{{ item.title }}</h2>-->
-<!--              {{ item.render }}-->
-<!--          {% endif %}-->
-
-<!--        {% endwith %}-->
-<!--      {% endfor %}-->
-<!--  </div>-->
-<!--<a href="{{ request.path }}test/"> Проверить свои знания ...</a>-->
-<!--<p>{{ object.modules.all }}</p>-->
+        <div class="progress">
+          <p>Прогресс:
+            {% for mod in modules %}
+              {% if mod.id == m.id %}
+                {{ mod.answered_questions }}/{{ mod.total_questions }}
+                <div>
+                  <div style="width: {{ mod.answered_questions|floatformat:2 }}/{{ mod.total_questions }} * 100%; height: 12px; background-color: #4caf50; border-radius: 5px;"></div>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </p>
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+</div>
 {% endblock %}

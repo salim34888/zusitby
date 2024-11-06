@@ -23,6 +23,7 @@
           <a href="{% url "course_list_subject" s.slug %}">
             {{ s.title }}
             <br>
+            <img src="{{ s.logo.url }}" alt="" width="30px" height="auto">
 <!--            <span>{{ s.total_courses }} курс{{ s.total_courses|pluralize }}</span>-->
           </a>
         </li>

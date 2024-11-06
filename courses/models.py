@@ -8,6 +8,7 @@ from django.template.loader import render_to_string
 class Subject(models.Model): # Раздел
     title = models.CharField(max_length=200)
     slug = models.CharField(max_length=200)
+    logo = models.FileField(upload_to='images', default='images/mylife.jpg')
 
     class Meta:
         ordering = ['title']
@@ -136,6 +137,7 @@ class Video(ItemBase):
 class Question(models.Model): # write owner column
     module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='questions')
     text = models.CharField(max_length=255)
+    is_active = models.BooleanField(default=True)
     correct_answer = models.CharField(max_length=255)
     expected_output = models.TextField(blank=True, null=True)
     coins = models.IntegerField(default=10)

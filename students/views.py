@@ -1,28 +1,28 @@
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import FormView
 from .forms import CourseEnrollForm
 from django.views.generic.list import ListView
-from django.views.generic import UpdateView
 from courses.models import Course, Question, Module
 from django.views.generic.detail import DetailView
 from django.shortcuts import get_object_or_404
-from .forms import AnswerForm, UserProfileForm, UserForm, CodeForm
+from .forms import AnswerForm, UserProfileForm, UserForm, CodeForm, CustomUserCreationForm
 from .models import UserProfile, UserAnswer
 from django.views.generic import View
 from django.template.response import TemplateResponse
 from django.contrib import messages
-import sys
+from django.db.models import Count, Q
 from io import StringIO
+import sys
 import re
+import itertools as IT
 
 
 class StudentRegistrationView(CreateView):
     template_name = 'students/student/registration.html'
-    form_class = UserCreationForm
+    form_class = CustomUserCreationForm  # Используем новую форму
     success_url = reverse_lazy('student_course_list')
 
     def form_valid(self, form):
@@ -67,13 +67,14 @@ class CodeQuestionView(LoginRequiredMixin, View):
         questions = Question.objects.filter(module=module)
 
         forms = []
+
         for question in questions:
             user_answer = UserAnswer.objects.filter(user=request.user, question=question, is_correct=True).first()
-
             if user_answer:
                 forms.append((question, None))
             else:
                 forms.append((question, CodeForm()))
+
 
         return TemplateResponse(request, self.template_name, {
             'module': module,
@@ -235,14 +236,29 @@ class StudentCourseView(LoginRequiredMixin, DetailView): # in future optimize th
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
         course = self.get_object()
+
         if 'module_id' in self.kwargs:
-            context['module'] = course.modules.get(
-                id=self.kwargs['module_id']
-            )
+            active_module = course.modules.get(id=self.kwargs['module_id'])
         else:
-            context['module'] = course.modules.all()[0]
+            active_module = course.modules.first()
+
+        modules = course.modules.annotate(
+            total_questions=Count('questions', filter=Q(questions__is_active=True)),
+            answered_questions=Count(
+                'questions',
+                filter=Q(questions__is_active=True, questions__answers__user=self.request.user, questions__answers__is_correct=True)
+            )
+        )
+
+        for module in modules:
+            print(f"Module: {module.title}")
+            print(f"Total Questions: {module.total_questions}")
+            print(f"Answered Questions: {module.answered_questions}")
+
+        context['modules'] = modules
+        context['module'] = active_module
+
         return context
 
 
@@ -284,3 +300,14 @@ class UserProfileEditView(LoginRequiredMixin, View):
             'user_form': user_form,
             'profile_form': profile_form
         })
+
+
+class UserListView(LoginRequiredMixin, View):
+    template_name = 'students/student/leaderboard.html'
+
+    def get(self, request):
+        profiles = UserProfile.objects.all().order_by('-points')
+        context = {
+            'profiles': profiles
+        }
+        return TemplateResponse(request, self.template_name, context)
