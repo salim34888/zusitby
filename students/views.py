@@ -17,7 +17,6 @@ from django.db.models import Count, Q
 from io import StringIO
 import sys
 import re
-import itertools as IT
 
 
 class StudentRegistrationView(CreateView):
@@ -223,6 +222,7 @@ class StudentCourseDetailView(CodeQuestionView, LoginRequiredMixin, DetailView):
             )
         else:
             context['module'] = course.modules.all()[0]
+
         return context
 
 
@@ -237,6 +237,7 @@ class StudentCourseView(LoginRequiredMixin, DetailView): # in future optimize th
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         course = self.get_object()
+        print(course.is_done)
 
         if 'module_id' in self.kwargs:
             active_module = course.modules.get(id=self.kwargs['module_id'])
@@ -250,11 +251,17 @@ class StudentCourseView(LoginRequiredMixin, DetailView): # in future optimize th
                 filter=Q(questions__is_active=True, questions__answers__user=self.request.user, questions__answers__is_correct=True)
             )
         )
+        counter = 0
+        al = 0
+        for mod in modules:
+            counter += mod.answered_questions
+            al += mod.total_questions
 
-        for module in modules:
-            print(f"Module: {module.title}")
-            print(f"Total Questions: {module.total_questions}")
-            print(f"Answered Questions: {module.answered_questions}")
+        if counter == al:
+            course.is_done = True
+        else:
+            course.is_done = False
+        course.save()
 
         context['modules'] = modules
         context['module'] = active_module
@@ -293,7 +300,7 @@ class UserProfileEditView(LoginRequiredMixin, View):
             return TemplateResponse(request, self.template_name, {
                 'user_form': user_form,
                 'profile_form': profile_form,
-                'success_url': self.success_url  # Используем reverse_lazy для успешного URL
+                'success_url': self.success_url
             })
 
         return TemplateResponse(request, self.template_name, {

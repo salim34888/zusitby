@@ -41,9 +41,16 @@ class Course(models.Model): # Курс
         'INSANE': 'INSANE',
     }
 
+    pc = { # tipo project or course
+        'Course': 'Course',
+        'Project': 'Project',
+    }
+
     title = models.CharField(max_length=200)
     difficulty = models.CharField(max_length=6, choices=diff, default='EASY')
+    pc = models.CharField(max_length=7, choices=pc, default='Course')
     logo = models.FileField(upload_to='images')
+    is_done = models.BooleanField(default=False)
     slug = models.SlugField(max_length=200, unique=True)
     overview = models.TextField()
     created = models.DateTimeField(auto_now_add=True)

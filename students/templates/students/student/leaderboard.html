@@ -6,5 +6,10 @@
 
     {% for profile in profiles %}
         <p>{{ profile.user.username }} - {{ profile.points }}</p>
+        {% if profile.avatar %}
+            <img src="{{ profile.avatar.url }}" alt="Аватар" width="150">
+        {% else %}
+            <p>pustota...</p>
+        {% endif %}
     {% endfor %}
 {% endblock %}
