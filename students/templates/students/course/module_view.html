@@ -5,9 +5,6 @@
 {% endblock %}
 
 {% block content %}
-  <h1>
-    {{ module.title }}
-  </h1>
   <div class="contents">
   <h3>Темы</h3>
   <ul id="modules">
@@ -25,10 +22,7 @@
           <p>Прогресс:
             {% for mod in modules %}
               {% if mod.id == m.id %}
-                {{ mod.answered_questions }}/{{ mod.total_questions }}
-                <div>
-                  <div style="width: {{ mod.answered_questions|floatformat:2 }}/{{ mod.total_questions }} * 100%; height: 12px; background-color: #4caf50; border-radius: 5px;"></div>
-                </div>
+                {{ mod.answered_questions }}/{{ m.questions.count }}
               {% endif %}
             {% endfor %}
           </p>
