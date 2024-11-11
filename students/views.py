@@ -237,8 +237,15 @@ class StudentCourseView(LoginRequiredMixin, DetailView): # in future optimize th
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         course = self.get_object()
+        print(course.is_done)
+
+        if 'module_id' in self.kwargs:
+            active_module = course.modules.get(id=self.kwargs['module_id'])
+        else:
+            active_module = course.modules.first()
 
         modules = course.modules.annotate(
+            total_questions=Count('questions', filter=Q(questions__is_active=True)),
             answered_questions=Count(
                 'questions',
                 filter=Q(questions__is_active=True, questions__answers__user=self.request.user, questions__answers__is_correct=True)
@@ -247,17 +254,17 @@ class StudentCourseView(LoginRequiredMixin, DetailView): # in future optimize th
         counter = 0
         al = 0
         for mod in modules:
-            question = mod.questions.filter(is_active=True)
             counter += mod.answered_questions
-            al += question.count()
+            al += mod.total_questions
 
-        if counter >= al:
+        if counter == al:
             course.is_done = True
         else:
             course.is_done = False
         course.save()
 
         context['modules'] = modules
+        context['module'] = active_module
 
         return context
 
