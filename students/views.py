@@ -251,6 +251,7 @@ class StudentCourseView(LoginRequiredMixin, DetailView): # in future optimize th
                 filter=Q(questions__is_active=True, questions__answers__user=self.request.user, questions__answers__is_correct=True)
             )
         )
+
         counter = 0
         al = 0
         for mod in modules:
