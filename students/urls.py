@@ -24,7 +24,7 @@ urlpatterns = [
         name='student_enroll_course'
     ),
     path(
-        'courses/',
+        'dashboard/',
         views.StudentCourseListView.as_view(),
         name='student_course_list'
     ),

@@ -149,9 +149,6 @@ class Question(models.Model): # write owner column
     expected_output = models.TextField(blank=True, null=True)
     coins = models.IntegerField(default=10)
 
-    def __str__(self):
-        return self.text
-
     def render(self):
         return render_to_string(
             f'courses/content/question.html',
