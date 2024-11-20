@@ -118,6 +118,7 @@ class CodeQuestionView(LoginRequiredMixin, View):
 
         forms = []
         questions = Question.objects.filter(module=module)
+
         for question in questions:
             user_answer = UserAnswer.objects.filter(user=request.user, question=question, is_correct=True).first()
             if user_answer:
@@ -167,7 +168,7 @@ class ModuleQuestionsView(LoginRequiredMixin, View):
         user_answer = UserAnswer.objects.filter(user=request.user, question=question, is_correct=True).first()
 
         if user_answer:
-            messages.info(request, 'Вы уже ответили правильно на этот вопрос.')
+            messages.info(request, 'А все')
             return self.get(request, module_id)
 
         form = AnswerForm(request.POST, question=question)
@@ -175,6 +176,7 @@ class ModuleQuestionsView(LoginRequiredMixin, View):
         if form.is_valid():
             user_answer = form.cleaned_data['answer']
             is_correct = user_answer.lower() == question.correct_answer.lower()
+
             UserAnswer.objects.create(
                 user=request.user,
                 question=question,
