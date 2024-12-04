@@ -5,30 +5,44 @@
 {% endblock %}
 
 {% block content %}
-<!--  <h1>-->
-<!--    {% if subject %}-->
-<!--      {{ subject.title }} курс-->
-<!--    {% else %}-->
-<!--      Все курсы-->
-<!--    {% endif %}-->
-<!--  </h1>-->
-  <div class="contents">
-    <h3>Пути обучения:</h3>
-    <ul id="modules">
-<!--      <li {% if not subject %}class="selected"{% endif %}>-->
-<!--        <a href="{% url "course_list" %}">Все</a>-->
-<!--      </li>-->
-      {% for s in subjects %}
-        <li {% if subject == s %}class="selected"{% endif %}>
-          <a href="{% url "course_list_subject" s.slug %}">
-            {{ s.title }}
-            <br>
-            <img src="{{ s.logo.url }}" alt="" width="30px" height="auto">
-<!--            <span>{{ s.total_courses }} курс{{ s.total_courses|pluralize }}</span>-->
-          </a>
-        </li>
-      {% endfor %}
-    </ul>
-  </div>
+    <div class="contents">
+        <h3>Пути обучения:</h3>
+        <ul id="modules">
+          {% for s in subjects %}
+            <li {% if subject == s %}class="selected"{% endif %}>
+              <a href="{% url "course_list_subject" s.slug %}">
+                <div class="text">{{ s.title }}</div>
+                <img src="{{ s.logo.url }}" alt="Logo for {{ s.title }}">
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+    </div>
 
 {% endblock %}
+
+<!--&lt;!&ndash;  <h1>&ndash;&gt;-->
+<!--&lt;!&ndash;    {% if subject %}&ndash;&gt;-->
+<!--&lt;!&ndash;      {{ subject.title }} курс&ndash;&gt;-->
+<!--&lt;!&ndash;    {% else %}&ndash;&gt;-->
+<!--&lt;!&ndash;      Все курсы&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endif %}&ndash;&gt;-->
+<!--&lt;!&ndash;  </h1>&ndash;&gt;-->
+<!--  <div class="contents">-->
+<!--    <h3>Пути обучения:</h3>-->
+<!--    <ul id="modules">-->
+<!--&lt;!&ndash;      <li {% if not subject %}class="selected"{% endif %}>&ndash;&gt;-->
+<!--&lt;!&ndash;        <a href="{% url "course_list" %}">Все</a>&ndash;&gt;-->
+<!--&lt;!&ndash;      </li>&ndash;&gt;-->
+<!--      {% for s in subjects %}-->
+<!--        <li {% if subject == s %}class="selected"{% endif %}>-->
+<!--          <a href="{% url "course_list_subject" s.slug %}">-->
+<!--            {{ s.title }}-->
+<!--            <br>-->
+<!--            <img src="{{ s.logo.url }}" alt="" width="300px" height="auto">-->
+<!--&lt;!&ndash;            <span>{{ s.total_courses }} курс{{ s.total_courses|pluralize }}</span>&ndash;&gt;-->
+<!--          </a>-->
+<!--        </li>-->
+<!--      {% endfor %}-->
+<!--    </ul>-->
+<!--  </div>-->

@@ -6,29 +6,32 @@
 
 {% block content %}
   {% with subject=object.subject %}
-    <h1>
-      {{ object.title }}
-    </h1>
-    <div class="module">
-      <h2>Overview</h2>
-      <p>
-        <a href="{% url "course_list_subject" subject.slug %}">
-        {{ subject.title }}</a>.
-        {{ object.modules.count }} modules.
-        Instructor: {{ object.owner.get_full_name }}
+    <div id="course-detail">
+      <h1 class="course-title">
+          {{ object.title }}
+      </h1>
+      <div class="image-container">
+          <img src="{{ subject.logo.url }}" alt="Logo for {{ subject.title }}">
+      </div>
+      <h2 class="module-title">Overview</h2>
+      <div class="module-overview">
+          {{ object.overview|linebreaks }}
+      </div>
+      <p class="module-info">
+          {{ object.modules.count }} modules. <br>
+          Instructor: {{ object.owner.get_full_name }}
       </p>
-      {{ object.overview|linebreaks }}
       {% if request.user.is_authenticated %}
-        <form action="{% url "student_enroll_course" %}" method="post">
+      <form action="{% url "student_enroll_course" %}" method="post" class="enroll-form">
           {{ enroll_form }}
           {% csrf_token %}
-          <input type="submit" value="Enroll now">
-        </form>
+          <input type="submit" value="Enroll now" class="enroll-button">
+      </form>
       {% else %}
-        <a href="{% url "student_registration" %}" class="button">
+      <a href="{% url "student_registration" %}" class="register-button">
           Register to enroll
-        </a>
+      </a>
       {% endif %}
-    </div>
+  </div>
   {% endwith %}
 {% endblock %}

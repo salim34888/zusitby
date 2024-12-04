@@ -1,284 +1,379 @@
 @import url(//fonts.googleapis.com/css?family=Roboto:500,300,400);
 
-body {
-    margin:0;
-    font-family:'Roboto', sans-serif;
-    font-weight:400;
-    color:#333;
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
-a {
-    color:#a40feb;
-    text-decoration:none;
-}
-
-ul {
-    float:left;
-}
-
-h1, h2, h3, h4, h5, h6 {
-    font-family:'Roboto', sans-serif;
-    font-weight:300;
-}
-
-h1 {
-    background: #b74aeb;
-    width:100%;
-    overflow:auto;
-    padding:20px 0 20px 40px;
-    margin:0;
-}
-
-.module {
-    padding:10px 20px;
-    float:left;
-    width:600px;
-}
-
-.module h3 {
-    margin:20px 0 0;
-    padding:0;
-    width:100%;
-}
-
-.module p {
-    margin:10px 0 20px;
-    width:100%;
-    float:left;
-}
+/*----------------------------------HEADER-----------------------------------------*/
 
 #header {
-    background:#4dcc43;
-    overflow:auto;
-    padding:10px 20px;
-    border-bottom:6px solid #3fad37;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f4f4f4; /* светлый фон */
+    border-bottom: 1px solid #ccc; /* линия разделения */
+    position: relative; /* для центрации центрального блока */
 }
 
 #header .logo {
-    text-decoration:none;
-    font-family:'Roboto', sans-serif;
-    font-weight:300;
-    text-transform:uppercase;
-    font-size:24px;
-    color:#fff;
-    float:left;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333; /* основной цвет текста */
+    text-decoration: none;
+    margin-right: auto; /* оставляет логотип слева */
+}
+
+#header .center-links {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 20px; /* промежуток между ссылками */
+}
+
+#header .center-links a {
+    font-size: 16px;
+    font-weight: bold;
+    color: #007BFF;
+    text-decoration: none;
+}
+
+#header .center-links a:hover {
+    text-decoration: underline;
+}
+
+#header .right-section {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* промежуток между секциями */
+}
+
+#header .user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* промежуток между элементами внутри */
+}
+
+#header img {
+    border-radius: 50%; /* круглая аватарка */
+    width: 50px;
+    height: auto;
+}
+
+#header p {
+    margin: 0;
+    font-size: 16px;
+    color: #555; /* вторичный цвет текста */
 }
 
 #header a {
-    color:#fff;
+    color: #007BFF; /* синий цвет ссылок */
+    text-decoration: none;
+}
+
+#header a:hover {
+    text-decoration: underline;
 }
 
 #header .menu {
-    list-style:none;
-    float:right;
-    margin:0;
-    padding:0;
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
-#header button {
-    background:transparent;
-    border:0;
-    color:#fff;
-    font-size:16px;
+#header .menu li {
+    margin: 0 15px;
 }
+
+#header .menu button {
+    background-color: #007BFF; /* синий цвет кнопки */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+#header .menu button:hover {
+    background-color: #0056b3; /* темнее при наведении */
+}
+
+/*---------------------------------------------------------------------------*/
+/*------------------------------------FOOTER---------------------------------------*/
+
+.site-footer {
+  background-color: #f4f4f4;
+  padding: 20px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  color: #333;
+  border-top: 1px solid #ddd;
+  margin-top: 150px;
+}
+
+.site-footer .footer-links {
+  margin-top: 10px;
+}
+
+.site-footer .footer-links a {
+  color: #0077cc;
+  text-decoration: none;
+  margin: 0 10px;
+  transition: color 0.3s;
+}
+
+.site-footer .footer-links a:hover {
+  color: #005fa3;
+}
+
+.site-footer .footer-links span {
+  color: #aaa;
+}
+
+
+/*---------------------------------------------------------------------------*/
+/*----------------------------------welcome page-----------------------------------------*/
+
+#welcome-screen {
+    height: calc(100vh - 30px); /* Высота экрана минус шапка и футер */
+    background: url('https://pic.rutubelist.ru/video/0f/62/0f62be0bec275485b408f503e9050e04.jpg') no-repeat center center/cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+}
+
+/*---------------------------------------------------------------------------*/
+/*---------------------------------------course blocks------------------------------------*/
 
 .contents {
-    width:20%;
-    padding:10px;
-    float:left;
-    background:#333;
-    color: #fff;
-    font-family:'Roboto', sans-serif;
+    flex: 1;
+    margin: 80px auto 40px; /* Отступы для учёта шапки и футера */
+    max-width: 1200px;
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: center;
 }
 
-.contents ul {
-    list-style:none;
-    margin:0;
-    padding:0;
-    width:100%;
+.contents #modules {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
 }
 
-.contents ul li {
-    margin:0 0 10px 0;
-    padding:4px 10px 10px;
-    overflow:auto;
-    cursor:move;
+.contents #modules li {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+    height: 300px; /* Высота блока */
 }
 
-.contents ul li.selected {
-    background:#3f3f3f;
+.contents #modules li:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.contents ul li:hover {
-    background:#3f3f3f;
+.contents #modules li a {
+    text-decoration: none;
+    color: #333;
+    font-size: 1rem;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
-.contents ul li.placeholder {
-  background: #333;
-  border:1px dashed #ccc;
-  padding:0;
-  margin:10px 0;
+.contents #modules li a .text {
+    padding: 10px;
+    background-color: #f9f9f9;
+    flex-shrink: 0;
 }
 
-.contents ul span {
-    text-transform:uppercase;
-    color:#bbb;
-    font-size:14px;
+.contents #modules li a img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Растягивает изображение по всему блоку */
+    flex-grow: 1; /* Картинка растягивается на оставшуюся высоту */
 }
 
-.contents ul a {
-    display:block;
-    color:#fff;
-    text-decoration:none;
-}
-
-.contents ul a:hover {
-    color:#4dcc43;
-    cursor:move;
-}
-
-ul.content-types li {
-    list-style:none;
-    float:left;
-    margin:10px;
-    background:#efefef;
-    padding:8px 14px;
-}
-
-.hidden {
-    display:none;
-}
-
-form p {
-    overflow:auto;
-}
-
-.errorlist {
-    color:#ae2c2c;
-    margin:0;
-}
-
-label {
-    float:left;
-    clear:both;
-    margin:0 0 8px 0;
-}
-
-input, select, textarea {
-    border:1px solid #ccc;
-    border-bottom:3px solid #ccc;
-    padding:8px 12px;
-    font-size:16px;
-    font-family:'Roboto', sans-serif;
-    float:left;
-    clear:both;
-    width:300px;
-}
-
-textarea {
-    height:80px;
-}
-
-select {
-    width:324px;
-}
-
-input[type=submit], a.button {
-    border-radius:5px;
-    background:#4dcc43;
-    color:#fff;
-    font-size:16px;
-    text-transform:uppercase;
-    border:none;
-    padding:10px 20px;
-    margin:20px 0;
-}
-
-a.secondary-button {
-    border:3px solid #4dcc43;
-    padding:10px 20px;
-    margin:10px 0;
-}
-
-input[type=submit]:hover, a.button:hover {
-    background:#3fad37;
-}
-
-ul#course-modules {
-    list-style:none;
-    overflow:auto;
-}
-
-ul#course-modules textarea {
-    width:600px;
-    height:120px;
-}
-
-ul#course-modules li {
-    padding:20px;
-    overflow:auto;
-    cursor:move;
-    user-select:none;
-}
-
-ul#course-modules li:nth-child(even) {
-    background:#efefef;
-}
-
-ul#course-modules li:hover {
-    background:#ccc;
-}
-
-#module-contents div {
-    padding:10px 20px;
-    border:1px solid #ccc;
-    background:#fff
-}
-
-#module-contents div.placeholder {
-  border:1px dashed #ccc;
-}
-
-#module-contents form {
-    margin:0;
-    padding:0;
-}
-
-#module-contents input[type=submit] {
-    color:#3fad37;
-    background:none;
-    margin:-20px 0 0;
-    padding:0;
-    float:left;
-    text-transform:none;
-}
-
-#module-contents div:hover {
-    cursor:move;
-}
-
-.course-info {
-    border:1px solid #ccc;
-    padding:0 20px;
-    margin-bottom:10px;
-    width:400px;
-    overflow:auto;
-}
-
-.course-info a {
-    margin-right:10px;
-}
-
-.helptext {
-    color:#ccc;
-    padding-left:20px;
-}
-
-.test {
-    margin: 30px;
+.module {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 элемента в строке */
+    gap: 10px;
+    margin-top: 200px;
+    justify-content: center;
+    padding: 0 180px;
 }
 
 .course_choice {
-    border: solid;
-    margin: 20px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+    width: 300px; /* Фиксированная ширина блока */
+    height: 500px; /* Увеличиваем размер блока */
+    overflow: hidden;
+    margin: 0 auto; /* Центрируем блок */
 }
+
+.course_choice:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.course_choice img {
+    width: 100%;
+    height: 250px; /* Увеличиваем высоту картинки */
+    object-fit: cover; /* Растягиваем картинку на весь блок */
+    margin-bottom: 10px;
+}
+
+.course_choice h3 {
+    font-size: 1.5rem;
+    margin: 10px 0;
+    text-align: center;
+}
+
+.course_choice h4 {
+    font-size: 1rem;
+    margin: 5px 0;
+    color: #555;
+    text-align: center;
+}
+
+.course_choice a {
+    text-decoration: none;
+    color: #007BFF;
+    font-weight: bold;
+}
+
+.course_choice a:hover {
+    text-decoration: underline;
+}
+
+/*---------------------------------------------------------------------------*/
+/*----------------------------------ENROLL PAGE-----------------------------------------*/
+
+/* Общий стиль контейнера */
+#course-detail {
+    max-width: 600px; /* Максимальная ширина страницы */
+    margin: 20px auto; /* Центрирование по горизонтали */
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column; /* Расположение элементов по вертикали */
+    align-items: center; /* Центрирование элементов */
+    gap: 20px; /* Расстояние между элементами */
+}
+
+/* Заголовок курса */
+#course-detail .course-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+}
+
+/* Изображение */
+.image-container {
+    width: 100%;
+    overflow: hidden;
+}
+
+.image-container img {
+    width: 100%;
+    height: auto; /* Сохраняем пропорции */
+    display: block;
+}
+
+/* Заголовок Overview */
+.module-title {
+    font-size: 1.5rem;
+    color: #444;
+    text-align: center;
+}
+
+/* Обзор курса */
+.module-overview {
+    background-color: #f9f9f9;
+    padding: 15px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    color: #333;
+    line-height: 1.6;
+    text-align: left;
+    width: 100%;
+}
+
+/* Информация о модуле */
+.module-info {
+    font-size: 1rem;
+    color: #666;
+    text-align: center;
+    width: 100%;
+}
+
+/* Кнопка записи */
+.enroll-form {
+    width: 100%;
+    text-align: center;
+}
+
+.enroll-button {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    width: 100%;
+}
+
+.enroll-button:hover {
+    background-color: #218838;
+}
+
+/* Ссылка на регистрацию */
+.register-button {
+    display: block;
+    text-align: center;
+    padding: 10px 15px;
+    background-color: #007BFF;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 1rem;
+    width: 100%;
+}
+
+.register-button:hover {
+    background-color: #0056b3;
+}
+
+
+/*---------------------------------------------------------------------------*/

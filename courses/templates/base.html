@@ -9,23 +9,35 @@
     <body>
         <div id="header">
             <a href="/" class="logo">ZusIT</a>
-            <p>{{ request.user.userprofile.points }}</p>
-            <img src="/media/{{ request.user.userprofile.avatar }}" alt="your avatar" width="50px" height="auto">
-            <a href="/students/profile/">Вот твой акк</a>
-            <a href="/students/leaderboard/">Список dungeon мастеров</a>
-            <ul class="menu">
-                {% if request.user.is_authenticated %}
-                    <li>
-                        <form action="{% url "logout" %}" method="post">
-                            {% csrf_token %}
-                            <button type="submit">Выйти покурить</button>
-                        </form>
-                    </li>
-                {% else %}
-                    <li><a href="{% url "login" %}">Welcome to the club, buddy!</a></li>
-                {% endif %}
-            </ul>
+            <div class="center-links">
+                <a href="/students/leaderboard/" class="center-link">Список dungeon мастеров</a>
+                <a href="http://127.0.0.1:8000/courses/" class="center-link">Курсы что ли</a>
+                <!-- Добавьте новые ссылки сюда -->
+                <a href="#" class="center-link">Ещё что-то</a>
+            </div>
+            <div class="right-section">
+                <div class="user-info">
+                    <img src="/media/{{ request.user.userprofile.avatar }}" alt="your avatar">
+                    <p>{{ request.user.userprofile.points }}</p>
+                    <a href="/students/profile/">Вот твой акк</a>
+                </div>
+                <ul class="menu">
+                    {% if request.user.is_authenticated %}
+                        <li>
+                            <form action="{% url "logout" %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit">Выйти покурить</button>
+                            </form>
+                        </li>
+                    {% else %}
+                        <li><a href="{% url "login" %}">Welcome to the club, buddy!</a></li>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
+
+
+
 
         <div id="content">
             {% block content %}
@@ -40,5 +52,15 @@
         {% endblock %}
         })
         </script>
+
+    <footer class="site-footer">
+          <p>© 2024. Все права защищены.</p>
+          <div class="footer-links">
+            <a href="https://t.me/your_telegram" target="_blank">Telegram</a>
+            <span>|</span>
+            <a href="mailto:your_email@example.com">Email</a>
+          </div>
+    </footer>
+        <script src="static/js/style.js"></script>
     </body>
 </html>

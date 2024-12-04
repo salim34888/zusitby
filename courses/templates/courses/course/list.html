@@ -5,49 +5,65 @@
 {% endblock %}
 
 {% block content %}
-<!--  <h1>-->
-<!--    {% if subject %}-->
-<!--      {{ subject.title }} курс-->
-<!--    {% else %}-->
-<!--      Все курсы-->
-<!--    {% endif %}-->
-<!--  </h1>-->
-  <div class="contents">
-    <h3>Пути обучения:</h3>
-    <ul id="modules">
-<!--      <li {% if not subject %}class="selected"{% endif %}>-->
-<!--        <a href="{% url "course_list" %}">Все</a>-->
-<!--      </li>-->
-      {% for s in subjects %}
-        <li {% if subject == s %}class="selected"{% endif %}>
-          <a href="{% url "course_list_subject" s.slug %}">
-            {{ s.title }}
-            <br>
-<!--            <span>{{ s.total_courses }} курс{{ s.total_courses|pluralize }}</span>-->
-          </a>
-        </li>
-      {% endfor %}
-    </ul>
-  </div>
-  <div class="module">
-    {% for course in courses %}
-      {% with subject=course.subject %}
-        <div class="course_choice">
-            <img src="{{ course.logo.url }}" alt="" width="200px" height="auto">
-            <h3>
-              <a href="{% url "course_detail" course.slug %}">
-                {{ course.title }}
-              </a>
-            </h3>
-            <h4>СЛОЖНОСТЬ: {{ course.difficulty }}</h4>
-            <h4>Тип типо: {{ course.pc }}</h4>
-        </div>
-<!--        <p>-->
-<!--          <a href="{% url "course_list_subject" subject.slug %}">{{ subject }}</a>.-->
-<!--            {{ course.total_modules }} Тема.-->
-<!--            Boss of this GYM: {{ course.owner.get_full_name }}-->
-<!--        </p>-->
-      {% endwith %}
-    {% endfor %}
-  </div>
+    <div class="module">
+        {% for course in courses %}
+          <div class="course_choice">
+              <h3>
+                <a href="{% url "course_detail" course.slug %}">
+                  {{ course.title }}
+                </a>
+              </h3>
+              <h4>СЛОЖНОСТЬ: {{ course.difficulty }}</h4>
+              <h4>Тип типо: {{ course.pc }}</h4>
+
+              <img src="{{ course.logo.url }}" alt="Logo for {{ course.title }}">
+          </div>
+        {% endfor %}
+    </div>
 {% endblock %}
+
+<!--&lt;!&ndash;  <h1>&ndash;&gt;-->
+<!--&lt;!&ndash;    {% if subject %}&ndash;&gt;-->
+<!--&lt;!&ndash;      {{ subject.title }} курс&ndash;&gt;-->
+<!--&lt;!&ndash;    {% else %}&ndash;&gt;-->
+<!--&lt;!&ndash;      Все курсы&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endif %}&ndash;&gt;-->
+<!--&lt;!&ndash;  </h1>&ndash;&gt;-->
+<!--  <div class="contents">-->
+<!--    <h3>Пути обучения:</h3>-->
+<!--    <ul id="modules">-->
+<!--&lt;!&ndash;      <li {% if not subject %}class="selected"{% endif %}>&ndash;&gt;-->
+<!--&lt;!&ndash;        <a href="{% url "course_list" %}">Все</a>&ndash;&gt;-->
+<!--&lt;!&ndash;      </li>&ndash;&gt;-->
+<!--      {% for s in subjects %}-->
+<!--        <li {% if subject == s %}class="selected"{% endif %}>-->
+<!--          <a href="{% url "course_list_subject" s.slug %}">-->
+<!--            {{ s.title }}-->
+<!--            <br>-->
+<!--&lt;!&ndash;            <span>{{ s.total_courses }} курс{{ s.total_courses|pluralize }}</span>&ndash;&gt;-->
+<!--          </a>-->
+<!--        </li>-->
+<!--      {% endfor %}-->
+<!--    </ul>-->
+<!--  </div>-->
+<!--  <div class="module">-->
+<!--    {% for course in courses %}-->
+<!--      {% with subject=course.subject %}-->
+<!--        <div class="course_choice">-->
+<!--            <img src="{{ course.logo.url }}" alt="" width="200px" height="auto">-->
+<!--            <h3>-->
+<!--              <a href="{% url "course_detail" course.slug %}">-->
+<!--                {{ course.title }}-->
+<!--              </a>-->
+<!--            </h3>-->
+<!--            <h4>СЛОЖНОСТЬ: {{ course.difficulty }}</h4>-->
+<!--            <h4>Тип типо: {{ course.pc }}</h4>-->
+<!--        </div>-->
+<!--&lt;!&ndash;        <p>&ndash;&gt;-->
+<!--&lt;!&ndash;          <a href="{% url "course_list_subject" subject.slug %}">{{ subject }}</a>.&ndash;&gt;-->
+<!--&lt;!&ndash;            {{ course.total_modules }} Тема.&ndash;&gt;-->
+<!--&lt;!&ndash;            Boss of this GYM: {{ course.owner.get_full_name }}&ndash;&gt;-->
+<!--&lt;!&ndash;        </p>&ndash;&gt;-->
+<!--      {% endwith %}-->
+<!--    {% endfor %}-->
+<!--  </div>-->
