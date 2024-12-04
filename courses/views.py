@@ -252,3 +252,6 @@ class CourseDeleteView(OwnerCourseMixin, DeleteView):
     template_name = 'courses/manage/course/delete.html'
     permission_required = 'courses.view_course'
 
+
+
+
